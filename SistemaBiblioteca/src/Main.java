@@ -1,15 +1,25 @@
-import entidades.Livro;
+import entidades.Biblioteca;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
+        Biblioteca biblioteca = new Biblioteca();
 
-        Livro livro1 = new Livro("1984", "George Orwell", 001, false);
-        Livro livro2 = new Livro("Dom Quixote", "Miguel de Cervantes", 002, true);
+        // Testando funcionalidades
+        System.out.println("\n=== TESTANDO SISTEMA ===");
+        biblioteca.listarTodosLivros();
+        biblioteca.listarUsuarios();
 
-        livro1.emprestar();
-        System.out.println(livro1);
-        System.out.println(livro2);
+        System.out.println("\n=== REALIZANDO EMPRÉSTIMOS ===");
+        biblioteca.emprestarLivro(1, 2);  // Felipe pega Senhor dos Anéis
+        biblioteca.emprestarLivro(3, 5);  // Carlos pega Crime e Castigo
+
+        System.out.println("\n=== TENTANDO EMPRESTAR LIVRO JÁ EMPRESTADO ===");
+        biblioteca.emprestarLivro(2, 2);  // Maria tenta pegar Senhor dos Anéis
+
+        System.out.println("\n=== DEVOLUÇÃO ===");
+        biblioteca.devolverLivro(2);  // Devolve Senhor dos Anéis
+
+        System.out.println("\n=== SITUAÇÃO FINAL ===");
+        biblioteca.listarTodosLivros();
     }
 }
