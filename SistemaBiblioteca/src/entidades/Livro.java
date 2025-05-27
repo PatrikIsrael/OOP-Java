@@ -1,45 +1,36 @@
 package entidades;
 
 public class Livro {
-    private String titulo;
-    private String autor;
-    private int id;
-    private boolean disponibilidade;
+    private final int id;
+    private final String titulo;
+    private final String autor;
+    private final String genero;
+    private final int ano;
+    private boolean disponivel;
 
-    public Livro(String titulo, String autor, int id, boolean disponibilidade) {
+    public Livro(int id, String titulo, String autor, String genero, int ano) {
+        this.id = id;
         this.titulo = titulo;
         this.autor = autor;
-        this.id = id;
-        this.disponibilidade = disponibilidade;
+        this.genero = genero;
+        this.ano = ano;
+        this.disponivel = true;
     }
 
-    public String getTitulo() {
-        return titulo;
-    }
 
-    public String getAutor() {
-        return autor;
-    }
+    public int getId() { return id; }
+    public String getTitulo() { return titulo; }
+    public String getAutor() { return autor; }
+    public boolean isDisponivel() { return disponivel; }
 
-    public int getId() {
-        return id;
-    }
 
-    public boolean isDisponibilidade() {
-        return disponibilidade;
-    }
-
-    public void emprestar(){
-        this.disponibilidade = false;
-    }
-    public void devolver(){
-        this.disponibilidade = true;
-    }
+    public void emprestar() { this.disponivel = false; }
+    public void devolver() { this.disponivel = true; }
 
     @Override
-    public String toString(){
-        return titulo + " (" + autor + ") - " + (disponibilidade ? "Disponível" : "Emprestado");
+    public String toString() {
+        return String.format("%d - %s (%s) - %s | %s",
+                id, titulo, autor, genero,
+                disponivel ? "✅ Disponível" : "⛔ Emprestado");
     }
-
-
 }
