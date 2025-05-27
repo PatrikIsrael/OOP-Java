@@ -20,14 +20,36 @@ Repositório de estudos sobre Programação Orientada a Objetos (OOP) utilizando
 - [x] Lambdas e Streams
 - [x] Collections API
 
-### Projeto Sistema Biblioteca 
-Sistema conta com alguns padrões aprendidos nos tópica a cima.
-O sistema conta com cadastro de livros, usuários, e saber se o livro está emprestado ou não.
-
 ### Padrões de Projeto
 - [ ] Singleton
 - [ ] Factory Method
 - [ ] Strategy
 - [ ] Observer
 
+### Projeto Sistema Biblioteca 
+## 📚 Sistema de Biblioteca (Exemplo Prático)
+
+### Estrutura do Projeto
+
+src/
+├── dados/
+│ └── DadosMockados.java
+└── entidades/
+├── Livro.java
+├── Usuario.java
+└── Biblioteca.java
+
+### Funcionalidades Implementadas
+- ✔️ Cadastro automático de livros e usuários
+- ✔️ Sistema de empréstimo e devolução
+- ✔️ Consulta de disponibilidade
+- ✔️ Listagem completa com filtros
+- ✔️ Validações de negócio
+
+### Como Executar
+```bash
+git clone https://github.com/seu-usuario/OOP-Java.git
+cd OOP-Java
+javac -d bin src/entidades/*.java src/dados/*.java
+java -cp bin entidades.Main
 
