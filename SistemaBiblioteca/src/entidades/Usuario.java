@@ -3,15 +3,19 @@ package entidades;
 import java.util.List;
 
 public class Usuario {
-
-    private String nome;
     private int id;
+    private String nome;
+    private String email;
     private List<String> livrosEmprestados;
 
-    public Usuario(String nome, int id, List<String> livrosEmprestados) {
-        this.nome = nome;
+    public Usuario(int id, String nome, String email) {
         this.id = id;
-        this.livrosEmprestados = livrosEmprestados;
+        this.nome = nome;
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public void pegarLivroEmprestado(String livro){
