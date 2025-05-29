@@ -1,40 +1,76 @@
 package entidades;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 public class Usuario {
-    private int id;
-    private String nome;
-    private String email;
-    private List<String> livrosEmprestados;
+    public void setDataDevolucao(LocalDate dataDevolucao) {
+        this.dataDevolucao = dataDevolucao;
+    }
 
-    public Usuario(int id, String nome, String email) {
-        this.id = id;
+    private final int id;
+    private final String nome;
+    private final String email;
+    private Livro livroEmprestado;
+    private LocalDate dataDevolucao;
+
+    public Usuario(int idUsuario, String nome, String email) {
+        this.id = idUsuario;
         this.nome = nome;
         this.email = email;
+    }
+
+    public boolean temLivroEmprestado() {
+        return livroEmprestado != null;
+    }
+
+    public void emprestarLivro(Livro livro) {
+        if (temLivroEmprestado()) {
+            throw new IllegalStateException("Usuário já tem livro emprestado");
+        }
+        this.livroEmprestado = livro;
+        this.dataDevolucao = LocalDate.now().plusDays(7);
+    }
+
+    public Livro devolverLivro() {
+        if (!temLivroEmprestado()) {
+            throw new IllegalStateException("Usuário não tem livro para devolver");
+        }
+        Livro livroDevolvido = livroEmprestado;
+        this.livroEmprestado = null;
+        this.dataDevolucao = null;
+        return livroDevolvido;
+    }
+
+    public boolean temAtraso() {
+        return dataDevolucao != null && LocalDate.now().isAfter(dataDevolucao);
+    }
+
+    public double calcularMulta() {
+        if (temAtraso()) {
+            long diasAtraso = ChronoUnit.DAYS.between(dataDevolucao, LocalDate.now());
+            return diasAtraso * 2.50; // R$ 2,50 por dia de atraso
+        }
+        return 0;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void pegarLivroEmprestado(String livro){
-        livrosEmprestados.add(livro);
-    }
-
-    public void devolverLivro(String livro){
-        livrosEmprestados.remove(livro);
-    }
-
     public String getNome() {
         return nome;
     }
 
-    public List<String> getLivrosEmprestados() {
-        return livrosEmprestados;
-    }
-
     public int getId() {
         return id;
+    }
+
+    public LocalDate getDataDevolucao() {
+        return dataDevolucao;
+    }
+
+    public Livro getLivroEmprestado() {
+        return livroEmprestado;
     }
 }
