@@ -1,6 +1,8 @@
 package entidades;
 
 import dados.DadosMockados;
+
+import java.time.LocalDate;
 import java.util.*;
 
 public class Biblioteca {
@@ -18,12 +20,6 @@ public class Biblioteca {
    private void carregarDadosIniciais() {
       livros.addAll(DadosMockados.getLivrosIniciais());
       usuarios.addAll(DadosMockados.getUsuariosIniciais());
-   }
-
-   public List<Livro> getLivrosDisponiveis() {
-      return livros.stream()
-              .filter(Livro::isDisponivel)
-              .toList();
    }
 
    public void listarTodosLivros() {
@@ -51,27 +47,58 @@ public class Biblioteca {
       }
 
       livro.emprestar();
+      usuario.emprestarLivro(livro);
       emprestimos.put(livro, usuario);
       System.out.printf("✅ Empréstimo realizado: %s para %s%n",
               livro.getTitulo(), usuario.getNome());
+      System.out.println("📅 Data de devolução: " + usuario.getDataDevolucao());
    }
 
-   public void devolverLivro(int idLivro) {
-      Livro livro = buscarLivro(idLivro);
+   public void deolverLivro ( int idUsuario){
+      Usuario usuario = buscarUsuario((idUsuario));
 
-      if (livro == null) {
-         System.out.println("❌ Livro não encontrado!");
+      if (usuario == null){
+         System.out.println("❌ Usuário não encontrado!");
          return;
       }
 
-      if (livro.isDisponivel()) {
-         System.out.println("ℹ️ Este livro já está disponível");
-         return;
+      if (!usuario.temLivroEmprestado()){
+         System.out.println("ℹ️ Você não tem livros para devolver");
       }
 
+      if (usuario.temAtraso()){
+         double multa = usuario.calcularMulta();
+         System.out.println("⚠️ Devolução atrasada! Multa: R$ " + String.format("%.2f", multa));
+      }
+
+      Livro livro =usuario.getLivroEmprestado();
       livro.devolver();
+      usuario.devolverLivro();
       emprestimos.remove(livro);
-      System.out.println("✅ Livro devolvido com sucesso: " + livro.getTitulo());
+      System.out.println("✅ Livro devolvido com sucesso!");
+
+   }
+
+   public void renovarEmprestimo(int idUsuario){
+      Usuario usuario = buscarUsuario(idUsuario);
+
+      if (usuario == null){
+         System.out.println("❌ Usuário não encontrado!");
+         return;
+      }
+
+      if (!usuario.temLivroEmprestado()){
+         System.out.println("ℹ️ Você não tem livros para devolver");
+      }
+
+      if (usuario.temAtraso()){
+         double multa = usuario.calcularMulta();
+         System.out.println("⚠️ Devolução atrasada! Multa: R$ " + String.format("%.2f", multa));
+      }
+
+      usuario.setDataDevolucao(LocalDate.now().plusDays(7));
+      System.out.println("🔄 Empréstimo renovado! Nova data: " + usuario.getDataDevolucao());
+
    }
 
    private Usuario buscarUsuario(int id) {
