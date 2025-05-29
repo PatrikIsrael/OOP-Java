@@ -1,12 +1,15 @@
 package entidades;
 
-public class Livro {
+import java.time.LocalDate;
+
+public class Livro implements StatusLivro {
     private final int id;
     private final String titulo;
     private final String autor;
     private final String genero;
     private final int ano;
     private boolean disponivel;
+    private LocalDate dataDevolucao;
 
     public Livro(int id, String titulo, String autor, String genero, int ano) {
         this.id = id;
@@ -21,16 +24,43 @@ public class Livro {
     public int getId() { return id; }
     public String getTitulo() { return titulo; }
     public String getAutor() { return autor; }
-    public boolean isDisponivel() { return disponivel; }
+    public String getGenero() { return genero; }
+    public int getAno() { return ano; }
+    public LocalDate getDataDevolucao() { return dataDevolucao; }
 
 
-    public void emprestar() { this.disponivel = false; }
-    public void devolver() { this.disponivel = true; }
+    @Override
+    public void emprestar() {
+        if (!disponivel) {
+            throw new IllegalStateException("❌ Livro '" + titulo + "' já está emprestado. Devolução prevista: " + dataDevolucao);
+        }
+        this.disponivel = false;
+        this.dataDevolucao = LocalDate.now().plusDays(7);
+    }
+
+    @Override
+    public void devolver() {
+        this.disponivel = true;
+        this.dataDevolucao = null;
+    }
+
+    @Override
+    public boolean isDisponivel() {
+        return disponivel;
+    }
+
+    @Override
+    public String getStatus() {
+        return disponivel
+                ? "✅ Disponível"
+                : "⛔ Emprestado (Devolver até: " + dataDevolucao + ")";
+    }
 
     @Override
     public String toString() {
-        return String.format("%d - %s (%s) - %s | %s",
-                id, titulo, autor, genero,
-                disponivel ? "✅ Disponível" : "⛔ Emprestado");
+        return String.format(
+                "%d - %s (%s) - %s | %s",
+                id, titulo, autor, genero, getStatus()
+        );
     }
 }
