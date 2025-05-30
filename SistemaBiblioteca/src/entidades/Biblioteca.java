@@ -7,71 +7,111 @@ import java.util.*;
 
 public class Biblioteca {
    private final List<Livro> livros;
-   private final List<Usuario> usuarios;
+   private Map<String, Usuario> usuarios;
    private final Map<Livro, Usuario> emprestimos;
+   private Map<Integer, String> livroAtualPorUsuario;
 
    public Biblioteca() {
       this.livros = new ArrayList<>();
-      this.usuarios = new ArrayList<>();
+      this.usuarios = new HashMap<>();
       this.emprestimos = new HashMap<>();
-      carregarDadosIniciais();
+      carregarLivros();
    }
 
-   private void carregarDadosIniciais() {
+   private void carregarLivros() {
       livros.addAll(DadosMockados.getLivrosIniciais());
-      usuarios.addAll(DadosMockados.getUsuariosIniciais());
+//      usuarios.addAll(DadosMockados.getUsuariosIniciais());
    }
+
+   public String cadastrarUsuario(String nome, String email){
+      Objects.requireNonNull(nome, "Nome não pode ser nulo");
+      Objects.requireNonNull(email, "E-mail não pode ser nulo");
+
+      nome = nome.trim();
+      if (nome.isEmpty()){
+         throw new IllegalArgumentException("Nome não pode ser vazio");
+      }
+
+      if (!email.contains("@")){
+         throw new IllegalArgumentException("E-mail inválido");
+      }
+
+      if (emailJaCadastrado(email)){
+         throw new IllegalArgumentException("E-mail já cadastrado");
+      }
+
+      String id = gerarId();
+      Usuario novousuario = new Usuario();
+      usuarios.put(id, novousuario);
+       return id;
+   }
+
+   public boolean emailJaCadastrado(String email) {
+      return usuarios.values().stream()
+              .anyMatch(usuario -> usuario.getEmail().equalsIgnoreCase(email));
+   }
+
+
+   private String gerarId(){
+      return "user-" + (usuarios.size() + 1);
+   }
+   public Usuario buscarUsuario(String id){
+      return usuarios.get(id);
+   }
+
 
    public void listarTodosLivros() {
       System.out.println("\n=== LIVROS CADASTRADOS ===");
-      livros.forEach(System.out::println);
+      livros.forEach(livro -> {
+         System.out.println(livro+ " - " +
+                 (livro.isDisponivel() ? "Disponível" : "Emprestado"));
+      });
    }
 
-   public void listarUsuarios() {
-      System.out.println("\n=== USUÁRIOS CADASTRADOS ===");
-      usuarios.forEach(System.out::println);
+   private Livro buscarLivro(int id) {
+      return livros.stream()
+              .filter(l -> l.getId() == id)
+              .findFirst()
+              .orElseThrow(() -> new IllegalArgumentException("Livro não encontrado!"));
    }
 
-   public void emprestarLivro(int idUsuario, int idLivro) {
-      Usuario usuario = buscarUsuario(idUsuario);
-      Livro livro = buscarLivro(idLivro);
 
-      if (usuario == null || livro == null) {
-         System.out.println("❌ Operação falhou: usuário ou livro não encontrado!");
-         return;
+   public void emprestarLivro(int usuarioId, int livroId) {
+      Usuario usuario = buscarUsuario(String.valueOf(usuarioId));
+      if (usuario == null){
+         throw new IllegalArgumentException("Usuárionão encontrado! ");
       }
 
-      if (!livro.isDisponivel()) {
-         System.out.println("❌ O livro '" + livro.getTitulo() + "' já está emprestado!");
-         return;
+      Livro livro = buscarLivro((livroId));
+      if (!livro.isDisponivel()){
+         throw new IllegalArgumentException("O livro'" + livro.getTitulo() + "' jé está emprestado !");
       }
 
+      if (usuario.temLivroEmprestado()){
+         throw new IllegalArgumentException("Usuário já possui um livro emprestado!");
+      }
       livro.emprestar();
       usuario.emprestarLivro(livro);
       emprestimos.put(livro, usuario);
-      System.out.printf("✅ Empréstimo realizado: %s para %s%n",
-              livro.getTitulo(), usuario.getNome());
-      System.out.println("📅 Data de devolução: " + usuario.getDataDevolucao());
+      livroAtualPorUsuario.put(usuarioId, String.valueOf(livro));
    }
 
-   public void deolverLivro ( int idUsuario){
-      Usuario usuario = buscarUsuario((idUsuario));
-
+   public void deolverLivro ( String id){
+      Usuario usuario = buscarUsuario((id));
       if (usuario == null){
-         System.out.println("❌ Usuário não encontrado!");
-         return;
+         throw new IllegalArgumentException("Usu[ario não encontrado");
       }
 
       if (!usuario.temLivroEmprestado()){
          System.out.println("ℹ️ Você não tem livros para devolver");
       }
+      Livro livro = usuario.getLivroEmprestado();
 
       if (usuario.temAtraso()){
          double multa = usuario.calcularMulta();
          System.out.println("⚠️ Devolução atrasada! Multa: R$ " + String.format("%.2f", multa));
       }
 
-      Livro livro =usuario.getLivroEmprestado();
       livro.devolver();
       usuario.devolverLivro();
       emprestimos.remove(livro);
@@ -79,9 +119,8 @@ public class Biblioteca {
 
    }
 
-   public void renovarEmprestimo(int idUsuario){
-      Usuario usuario = buscarUsuario(idUsuario);
-
+   public void renovarEmprestimo(String id){
+      Usuario usuario = buscarUsuario(id);
       if (usuario == null){
          System.out.println("❌ Usuário não encontrado!");
          return;
@@ -101,17 +140,12 @@ public class Biblioteca {
 
    }
 
-   private Usuario buscarUsuario(int id) {
-      return usuarios.stream()
-              .filter(u -> u.getId() == id)
-              .findFirst()
-              .orElse(null);
+   public String verLivroAtual(String usuarioId) {
+      if (!usuarios.containsKey(usuarioId)) {
+         throw new IllegalArgumentException("Usuário não encontrado!");
+      }
+      return livroAtualPorUsuario.get(usuarioId);
    }
 
-   private Livro buscarLivro(int id) {
-      return livros.stream()
-              .filter(l -> l.getId() == id)
-              .findFirst()
-              .orElse(null);
-   }
+
 }
