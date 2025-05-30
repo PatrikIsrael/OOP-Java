@@ -3,11 +3,11 @@ package entidades;
 import java.time.LocalDate;
 
 public class Livro implements StatusLivro {
-    private final int id;
-    private final String titulo;
-    private final String autor;
-    private final String genero;
-    private final int ano;
+    private int id;
+    private String titulo;
+    private String autor;
+    private String genero;
+    private  int ano;
     private boolean disponivel;
     private LocalDate dataDevolucao;
 
