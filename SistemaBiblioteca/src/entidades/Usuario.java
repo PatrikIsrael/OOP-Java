@@ -4,20 +4,22 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 public class Usuario {
-    public void setDataDevolucao(LocalDate dataDevolucao) {
-        this.dataDevolucao = dataDevolucao;
-    }
 
-    private final int id;
-    private final String nome;
-    private final String email;
+
+    private int id;
+    private String nome;
+    private String email;
     private Livro livroEmprestado;
     private LocalDate dataDevolucao;
 
-    public Usuario(int idUsuario, String nome, String email) {
-        this.id = idUsuario;
+    public Usuario() {
+        this.id = id;
         this.nome = nome;
         this.email = email;
+    }
+
+    public void setDataDevolucao(LocalDate dataDevolucao) {
+        this.dataDevolucao = dataDevolucao;
     }
 
     public boolean temLivroEmprestado() {
@@ -73,4 +75,5 @@ public class Usuario {
     public Livro getLivroEmprestado() {
         return livroEmprestado;
     }
+
 }
