@@ -20,13 +20,13 @@ public final class DadosMockados {
         );
     }
 
-    public static List<Usuario> getUsuariosIniciais() {
-        return List.of(
-                new Usuario(1, "Felipe Silva", "felipe@email.com"),
-                new Usuario(2, "Maria Oliveira", "maria@email.com"),
-                new Usuario(3, "Carlos Pereira", "carlos@email.com"),
-                new Usuario(4, "Ana Santos", "ana@email.com"),
-                new Usuario(5, "Pedro Costa", "pedro@email.com")
-        );
-    }
+//    public static List<Usuario> getUsuariosIniciais() {
+//        return List.of(
+//                new Usuario(1, "Felipe Silva", "felipe@email.com"),
+//                new Usuario(2, "Maria Oliveira", "maria@email.com"),
+//                new Usuario(3, "Carlos Pereira", "carlos@email.com"),
+//                new Usuario(4, "Ana Santos", "ana@email.com"),
+//                new Usuario(5, "Pedro Costa", "pedro@email.com")
+//        );
+//    }
 }
