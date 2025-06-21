@@ -9,12 +9,13 @@ public class Biblioteca {
    private final List<Livro> livros;
    private Map<String, Usuario> usuarios;
    private final Map<Livro, Usuario> emprestimos;
-   private Map<Integer, String> livroAtualPorUsuario;
+   private Map<Integer, Livro> livroAtualPorUsuario;
 
    public Biblioteca() {
       this.livros = new ArrayList<>();
       this.usuarios = new HashMap<>();
       this.emprestimos = new HashMap<>();
+      this.livroAtualPorUsuario = new HashMap<>();
       carregarLivros();
    }
 
@@ -23,7 +24,7 @@ public class Biblioteca {
 //      usuarios.addAll(DadosMockados.getUsuariosIniciais());
    }
 
-   public String cadastrarUsuario(String nome, String email){
+   public int cadastrarUsuario(String nome, String email){
       Objects.requireNonNull(nome, "Nome não pode ser nulo");
       Objects.requireNonNull(email, "E-mail não pode ser nulo");
 
@@ -40,9 +41,9 @@ public class Biblioteca {
          throw new IllegalArgumentException("E-mail já cadastrado");
       }
 
-      String id = gerarId();
+      int id = gerarId();
       Usuario novousuario = new Usuario();
-      usuarios.put(id, novousuario);
+      usuarios.put(String.valueOf(id), novousuario);
        return id;
    }
 
@@ -52,9 +53,10 @@ public class Biblioteca {
    }
 
 
-   private String gerarId(){
-      return "user-" + (usuarios.size() + 1);
+   private int gerarId() {
+      return usuarios.size() + 1;
    }
+
    public Usuario buscarUsuario(String id){
       return usuarios.get(id);
    }
@@ -77,24 +79,27 @@ public class Biblioteca {
 
 
    public void emprestarLivro(int usuarioId, int livroId) {
-      Usuario usuario = buscarUsuario(String.valueOf(usuarioId));
+      String usuarioIdStr = String.valueOf(usuarioId);
+      Usuario usuario = buscarUsuario(usuarioIdStr);
       if (usuario == null){
-         throw new IllegalArgumentException("Usuárionão encontrado! ");
+         throw new IllegalArgumentException("Usuário não encontrado!");
       }
 
-      Livro livro = buscarLivro((livroId));
+      Livro livro = buscarLivro(livroId);
       if (!livro.isDisponivel()){
-         throw new IllegalArgumentException("O livro'" + livro.getTitulo() + "' jé está emprestado !");
+         throw new IllegalArgumentException("O livro '" + livro.getTitulo() + "' já está emprestado!");
       }
 
       if (usuario.temLivroEmprestado()){
          throw new IllegalArgumentException("Usuário já possui um livro emprestado!");
       }
+
       livro.emprestar();
       usuario.emprestarLivro(livro);
       emprestimos.put(livro, usuario);
-      livroAtualPorUsuario.put(usuarioId, String.valueOf(livro));
+      livroAtualPorUsuario.put(Integer.valueOf(usuarioIdStr), livro);
    }
+
 
    public void deolverLivro ( String id){
       Usuario usuario = buscarUsuario((id));
@@ -140,11 +145,12 @@ public class Biblioteca {
 
    }
 
-   public String verLivroAtual(String usuarioId) {
-      if (!usuarios.containsKey(usuarioId)) {
+   public Livro verLivroAtualPorUsuario(int usuarioId) {
+      String usuarioIdStr = String.valueOf(usuarioId);
+      if (!usuarios.containsKey(usuarioIdStr)) {
          throw new IllegalArgumentException("Usuário não encontrado!");
       }
-      return livroAtualPorUsuario.get(usuarioId);
+      return livroAtualPorUsuario.get(usuarioIdStr);
    }
 
 

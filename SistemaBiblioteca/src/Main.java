@@ -26,7 +26,7 @@ public class Main {
                         String nome = scanner.nextLine();
                         System.out.print("Email: ");
                         String email = scanner.nextLine();
-                        userId = Integer.parseInt(biblioteca.cadastrarUsuario(nome, email));
+                        userId = Integer.parseInt(String.valueOf(biblioteca.cadastrarUsuario(nome, email)));
                         System.out.println("✅ Cadastro realizado! ID: " + userId);
                         break;
                     case 2:
@@ -67,7 +67,7 @@ public class Main {
                         biblioteca.renovarEmprestimo(String.valueOf(userId));
                         break;
                     case 5:
-                        biblioteca.verLivroAtual(String.valueOf(userId));
+                        biblioteca.verLivroAtualPorUsuario(Integer.parseInt(String.valueOf(userId)));
                         break;
                     case 6:
                         userId = -1;

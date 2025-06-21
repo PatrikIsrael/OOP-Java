@@ -6,14 +6,12 @@ import java.time.temporal.ChronoUnit;
 public class Usuario {
 
 
-    private int id;
     private String nome;
     private String email;
     private Livro livroEmprestado;
     private LocalDate dataDevolucao;
 
     public Usuario() {
-        this.id = id;
         this.nome = nome;
         this.email = email;
     }
@@ -64,9 +62,6 @@ public class Usuario {
         return nome;
     }
 
-    public int getId() {
-        return id;
-    }
 
     public LocalDate getDataDevolucao() {
         return dataDevolucao;
