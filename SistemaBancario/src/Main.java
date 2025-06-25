@@ -1,6 +1,7 @@
 import entidades.ContaCorrente;
 import entidades.ContaPoupanca;
 
+import java.sql.SQLOutput;
 import java.util.Scanner;
 
 public class Main {
@@ -81,11 +82,12 @@ public class Main {
 
     public static void menuContaPoupanca(ContaPoupanca conta, Scanner sc) {
         while (true) {
-            System.out.println("\n=== MENU CONTA CORRENTE ===");
+            System.out.println("\n=== MENU CONTA POUPANCA===");
             System.out.println("1. Ver saldo");
             System.out.println("2. Depositar");
             System.out.println("3. Sacar");
-            System.out.println("4. Voltar ou menu principal");
+            System.out.println("4. Ver rendimentos");
+            System.out.println("5. Voltar ou menu principal");
             System.out.println("Escolha");
 
             int opcao = sc.nextInt();
@@ -109,6 +111,10 @@ public class Main {
                     break;
 
                 case 4:
+                    System.out.println("Deseja ver seu rendimento ?");
+                    conta.aplicarRendimentos();
+
+                case 5:
                     return;
 
                 default:

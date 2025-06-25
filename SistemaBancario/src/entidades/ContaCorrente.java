@@ -11,7 +11,7 @@ public class ContaCorrente extends ContaBancaria {
         double taxa = calcularTaxa(valor);
         double valorTotal = valor + taxa;
 
-        if(valor > 0 && valorTotal <= saldo){
+        if(saldo > valor){
             saldo -= valorTotal;
             System.out.println(
                     "Saque de R$ " + valor + " realizado " +
@@ -19,6 +19,8 @@ public class ContaCorrente extends ContaBancaria {
                     "Saldo atual: R$ " + saldo
 
             );
+        }else {
+            System.out.println("Saldo insuficiente");
         }
     }
 
