@@ -2,46 +2,50 @@ package entities;
 
 public class Account {
     private String name;
-    private String accountNumber;
+    private int accountNumber;
     private double balance;
-    private double totalDeposits;
 
-    public Account(String name, String accountNumber) {
+
+    public Account(String name, int accountNumber) {
         this.name = name;
         this.accountNumber = accountNumber;
-        this.balance = 0;
-        this.totalDeposits = 0;
+        this.balance = 0.0;
     }
 
-    public String getName() {
+    public Account(String name, int accountNumber, double initialDeposit){
+        this.name = name;
+        this.accountNumber = accountNumber;
+        deposit(initialDeposit);
+    }
+
+    public String getName(){
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName (String name){
+       this.name = name;
     }
 
-    public String getAccountNumber() {
+    public int getAccountNumber(){
         return accountNumber;
     }
 
-    public double getBalance() {
+    public double getBalance(){
         return balance;
     }
 
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
-
-    public double deposit(double amount) {
-        totalDeposits += amount;
+    public void deposit(double amount){
         balance += amount;
-        return balance;
     }
 
-    public void withdraw(double amount) {
-        double tax = 5.0;
-        double totalWithdraw = amount + tax;
-       balance -= totalWithdraw;
+    public void withdraw(double amount){
+        balance -= amount + 5.0;
+    }
+
+    @Override
+    public String toString(){
+        return "Account " + accountNumber
+                + ", Holder " + name
+                + ", Balance: $ " + String.format("%.2f", balance);
     }
 }
