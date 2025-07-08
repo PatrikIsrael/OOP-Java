@@ -11,14 +11,14 @@ public class Main {
         System.out.println("How many numbers are you going to type?: ");
         int n = sc.nextInt();
         double [] vect = new double[n];
-        double bigger = vect[0];
-        int positionBigger = 0;
-        sc.nextLine();
 
-        for (int i = 0; i > vect.length; i++) {
+        for (int i = 0; i < vect.length; i++) {
             System.out.println("Enter number " + (i + 1) + ": ");
             vect[i] = sc.nextDouble();
         }
+
+        double bigger = vect[0];
+        int positionBigger = 0;
         for (int i = 1; i < vect.length; i++) {
             if (vect[i] > bigger){
                 bigger = vect[i];
