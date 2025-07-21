@@ -9,20 +9,22 @@ import java.util.List;
 public class Worker {
 
     private String name;
-    private WorkerLevel workerLevel;
+    private WorkerLevel level;
     private Double baseSalary;
+
     private Department department;
-    private List<HourContract> hourContracts = new ArrayList<>();
+    private List<HourContract> contracts = new ArrayList<>();
 
     public Worker() {
     }
 
-    public Worker(String name, WorkerLevel workerLevel, Double baseSalary, Department department) {
+    public Worker(String name, WorkerLevel level, Double baseSalary, Department department) {
         this.name = name;
-        this.workerLevel = workerLevel;
+        this.level = level;
         this.baseSalary = baseSalary;
         this.department = department;
     }
+
 
     public String getName() {
         return name;
@@ -49,34 +51,34 @@ public class Worker {
     }
 
     public WorkerLevel getWorkerLevel() {
-        return workerLevel;
+        return level;
     }
 
     public void setWorkerLevel(WorkerLevel workerLevel) {
-        this.workerLevel = workerLevel;
+        this.level = workerLevel;
     }
 
-    public List<HourContract> getHourContracts() {
-        return hourContracts;
+    public List<HourContract> getContracts() {
+        return contracts;
     }
 
     public void addContract(HourContract contract){
-        hourContracts.add(contract);
+        contracts.add(contract);
     }
 
     public void removeContract(HourContract contract){
-        hourContracts.remove(contract);
+        contracts.remove(contract);
     }
 
-    public double income (int mount, int year){
+    public double income (int year, int month){
         double sum = baseSalary;
         Calendar cal = Calendar.getInstance();
-        for (HourContract c : hourContracts){
+        for (HourContract c : contracts){
             cal.setTime(c.getDate());
             int c_year = cal.get(Calendar.YEAR);
-            int c_mouth = 1+ cal.get(Calendar.MONTH);
-            if (year == c_year && mount == c_mouth){
-                sum += c.totalValue();
+            int c_month = 1 + cal.get(Calendar.MONTH);
+            if (year == c_year && month == c_month){
+                 sum += c.totalValue();
             }
         }
         return sum;
