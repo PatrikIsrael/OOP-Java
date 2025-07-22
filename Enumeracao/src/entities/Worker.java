@@ -80,7 +80,9 @@ public class Worker {
             if (year == c_year && month == c_month){
                  sum += c.totalValue();
             }
+
         }
+
         return sum;
     }
 
